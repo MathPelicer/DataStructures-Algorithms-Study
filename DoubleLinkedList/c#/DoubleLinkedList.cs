@@ -129,7 +129,7 @@ internal class DoubleLinkedList
         Node temp = first;
         while(temp != null)
         {
-            Console.WriteLine(temp.value);
+            Console.WriteLine($"prev: {temp.prevNode?.value} <- {temp.value} -> next {temp.nextNode?.value}");
             temp = temp.nextNode;
         }
         Console.WriteLine("");
@@ -150,13 +150,19 @@ public class Program{
 
         l.print();
 
+        System.Console.WriteLine("Removing some nodes...");
+
         l.remove(1);
         l.remove(9);
         l.remove(24);
         l.print();
+        
+        System.Console.WriteLine("Searching for a node...");
+        Node? findThis = l.search(33);
 
-        Node findThis = l.search(13);
-        Console.WriteLine(findThis.value.ToString());
+        if(findThis != null)
+            Console.WriteLine(findThis?.value.ToString());
+        Console.WriteLine("Node not found =(");
     }
 }
 
