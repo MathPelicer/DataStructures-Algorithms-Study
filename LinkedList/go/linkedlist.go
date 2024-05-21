@@ -55,8 +55,20 @@ func (linkedList *LinkedList) remove(value int) {
 	}
 }
 
-func search() {
+func (linkedList *LinkedList) search(value int) bool {
+	if linkedList.head.value == value {
+		return true
+	}
 
+	curNode := linkedList.head
+
+	for curNode.next != nil {
+		if curNode.value == value {
+			return true
+		}
+	}
+
+	return false
 }
 
 func (linkedList *LinkedList) print() {
@@ -86,5 +98,15 @@ func main() {
 	linkedList.remove(7)
 	linkedList.remove(8)
 
+	linkedList.print()
+
+	searchFive := linkedList.search(5)
+	searchSix := linkedList.search(6)
+
+	fmt.Printf("Searching for 5: %t\n", searchFive)
+	fmt.Printf("Searching for 6: %t\n", searchSix)
+
+	linkedList.add(7)
+	linkedList.add(8)
 	linkedList.print()
 }
