@@ -1,7 +1,4 @@
-﻿using System.Globalization;
-using System.Numerics;
-
-internal class Node(int value)
+﻿internal class Node(int value)
 {
     internal int value = value;
     internal Node prevNode = null;
@@ -13,7 +10,7 @@ internal class DoubleLinkedList
     private Node? first;
     private Node? last;
     private int n;
-    private readonly Node? head;
+    private Node? head;
 
     public bool Insert(int value)
     {
@@ -104,18 +101,16 @@ internal class DoubleLinkedList
             return null;
         }
 
-        Node? prevNode = null;
-        Node? curNode = first;
+        head = first;
 
-        while (curNode != null && curNode.value < value && curNode.nextNode != null)
+        while (head != null && head.value < value && head.nextNode != null)
         {
-            prevNode = curNode;
-            curNode = curNode.nextNode;
+            head = head.nextNode;
         }
 
-        if(curNode.value == value)
+        if(head.value == value)
         { 
-            return curNode;
+            return head;
         }
 
         return null;
@@ -130,8 +125,7 @@ internal class DoubleLinkedList
 
         var bottom = 0;
         var last = n - 1;
-        Node? curNode = first;
-        Node? prevNode = null;
+        head = first;
 
         while (last >= bottom)
         {
@@ -139,18 +133,17 @@ internal class DoubleLinkedList
 
             for (var i = 0; i < middle; i++)
             {
-                prevNode = curNode;
-                curNode = curNode.nextNode;
+                head = head.nextNode;
 
-                if (curNode.value == value)
+                if (head.value == value)
                 {
-                    return curNode;
+                    return head;
                 }
-                else if (curNode.value < value)
+                else if (head.value < value)
                 {
                     bottom = middle + 1;
                 }
-                else if (curNode.value > value)
+                else if (head.value > value)
                 {
                     last = middle - 1;
                 }
