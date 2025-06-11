@@ -1,31 +1,28 @@
-﻿internal class Node{
-    internal int value;
-    internal Node prevNode;
-    internal Node nextNode;
+﻿using System.Globalization;
+using System.Numerics;
 
-    public Node(int value)
-    {
-        this.value = value;
-        this.prevNode = null;
-        this.nextNode = null;
-    }   
+internal class Node(int value)
+{
+    internal int value = value;
+    internal Node prevNode = null;
+    internal Node nextNode = null;
 }
 
 internal class DoubleLinkedList
 {
-    private Node first;
-    private Node last;
+    private Node? first;
+    private Node? last;
     private int n;
-    private Node head;
+    private readonly Node? head;
 
-    public bool insert(int value)
+    public bool Insert(int value)
     {
-        Node newNode = new Node(value);
+        Node newNode = new(value);
         if (newNode == null)
             return false;
 
-        Node prevNode = null;
-        Node curNode = first;
+        Node? prevNode = null;
+        Node? curNode = first;
 
         while(curNode != null && curNode.value < value)
         {
@@ -53,19 +50,19 @@ internal class DoubleLinkedList
         }
         newNode.prevNode = prevNode;
 
-        n = n + 1;
+        n++;
         return true;
     }
 
-    public bool remove(int value)
+    public bool Remove(int value)
     {
         if(value == null)
         {
             return false;
         }
 
-        Node prevNode = null;
-        Node curNode = first;
+        Node? prevNode = null;
+        Node? curNode = first;
 
         while (curNode != null && curNode.value < value)
         {
@@ -96,19 +93,19 @@ internal class DoubleLinkedList
             last = curNode.prevNode;
         }
 
-        n = n - 1;
+        n--;
         return true;
     }
 
-    public Node search(int value)
+    public Node? Search(int value)
     {
         if (value == null)
         {
             return null;
         }
 
-        Node prevNode = null;
-        Node curNode = first;
+        Node? prevNode = null;
+        Node? curNode = first;
 
         while (curNode != null && curNode.value < value && curNode.nextNode != null)
         {
@@ -124,10 +121,49 @@ internal class DoubleLinkedList
         return null;
     }
 
-    public void print()
+    public Node? BinarySearch(int value)
     {
-        Node temp = first;
-        while(temp != null)
+        if (value == null || n <= 0)
+        {
+            return null;
+        }
+
+        var bottom = 0;
+        var last = n - 1;
+        Node? curNode = first;
+        Node? prevNode = null;
+
+        while (last >= bottom)
+        {
+            int middle = (bottom + last) / 2;
+
+            for (var i = 0; i < middle; i++)
+            {
+                prevNode = curNode;
+                curNode = curNode.nextNode;
+
+                if (curNode.value == value)
+                {
+                    return curNode;
+                }
+                else if (curNode.value < value)
+                {
+                    bottom = middle + 1;
+                }
+                else if (curNode.value > value)
+                {
+                    last = middle - 1;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public void Print()
+    {
+        Node? temp = first;
+        while (temp != null)
         {
             Console.WriteLine($"prev: {temp.prevNode?.value} <- {temp.value} -> next {temp.nextNode?.value}");
             temp = temp.nextNode;
@@ -140,29 +176,37 @@ public class Program{
     static void Main()
     {
         DoubleLinkedList l = new();
-        l.insert(3);
-        l.insert(7);
-        l.insert(1);
-        l.insert(3);
-        l.insert(6);
-        l.insert(9);
-        l.insert(24);
+        l.Insert(3);
+        l.Insert(7);
+        l.Insert(1);
+        l.Insert(3);
+        l.Insert(6);
+        l.Insert(9);
+        l.Insert(24);
 
-        l.print();
+        l.Print();
 
-        System.Console.WriteLine("Removing some nodes...");
+        Console.WriteLine("Removing some nodes...");
 
-        l.remove(1);
-        l.remove(9);
-        l.remove(24);
-        l.print();
-        
-        System.Console.WriteLine("Searching for a node...");
-        Node? findThis = l.search(33);
+        l.Remove(1);
+        l.Remove(9);
+        l.Print();
 
-        if(findThis != null)
+        Console.WriteLine("Searching for a node 33...");
+        Node? findThis = l.Search(33);
+
+        if (findThis != null)
             Console.WriteLine(findThis?.value.ToString());
-        Console.WriteLine("Node not found =(");
+        else
+            Console.WriteLine("Node not found =(");
+        
+        Console.WriteLine("Binary Searching for a node 24...");
+        Node? findThis2 = l.BinarySearch(24);
+
+        if(findThis2 != null)
+            Console.WriteLine(findThis2?.value.ToString());
+        else
+            Console.WriteLine("Node not found =(");
     }
 }
 
